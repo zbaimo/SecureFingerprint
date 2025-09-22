@@ -1,139 +1,135 @@
 version: '3.8'
 
 services:
-  # Redis 缓存服务
-  redis:
-    image: redis:7-alpine
-    container_name: firewall-redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
-    command: redis-server /usr/local/etc/redis/redis.conf
-    networks:
-      - firewall-network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  # MySQL 数据库服务
-  mysql:
-    image: mysql:8.0
-    container_name: firewall-mysql
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: firewall_root_password
-      MYSQL_DATABASE: firewall_controller
-      MYSQL_USER: firewall_user
-      MYSQL_PASSWORD: firewall_password
-      TZ: Asia/Shanghai
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
-    networks:
-      - firewall-network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-
-  # 防火墙控制器主应用
-  firewall-controller:
-    build: .
-    container_name: firewall-controller
+  # 防火墙控制器主应用 (超简化版本)
+  securefingerprint:
+    build:
+      context: .
+      dockerfile: Dockerfile.ultra-minimal
+    container_name: securefingerprint
     restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
       - TZ=Asia/Shanghai
-    volumes:
-      - ./configs:/app/configs:ro
-      - ./logs:/app/logs
-      - ./docker/app/config.yaml:/app/configs/config.yaml:ro
-    depends_on:
-      redis:
-        condition: service_healthy
-      mysql:
-        condition: service_healthy
     networks:
-      - firewall-network
+      - secure-network
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/api/v1/system/health"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api/v1/system/health || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 10s
+
+  # Redis 缓存服务 (可选 - 用于扩展功能)
+  redis:
+    image: redis:7-alpine
+    container_name: secure-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    networks:
+      - secure-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - full  # 仅在完整模式下启动
+
+  # MySQL 数据库服务 (可选 - 用于扩展功能)
+  mysql:
+    image: mysql:8.0
+    container_name: secure-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-secure_root_password}
+      MYSQL_DATABASE: securefingerprint
+      MYSQL_USER: secure_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-secure_password}
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - secure-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    profiles:
+      - full  # 仅在完整模式下启动
 
   # Nginx 反向代理 (可选)
   nginx:
     image: nginx:alpine
-    container_name: firewall-nginx
+    container_name: secure-nginx
     restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
       - nginx_logs:/var/log/nginx
     depends_on:
-      - firewall-controller
+      - securefingerprint
     networks:
-      - firewall-network
+      - secure-network
+    profiles:
+      - proxy  # 仅在代理模式下启动
 
   # Prometheus 监控 (可选)
   prometheus:
     image: prom/prometheus:latest
-    container_name: firewall-prometheus
+    container_name: secure-prometheus
     restart: unless-stopped
     ports:
       - "9090:9090"
     volumes:
-      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
+      - '--storage.tsdb.retention.time=168h'
       - '--web.enable-lifecycle'
     networks:
-      - firewall-network
+      - secure-network
+    profiles:
+      - monitoring  # 仅在监控模式下启动
 
   # Grafana 仪表板 (可选)
   grafana:
     image: grafana/grafana:latest
-    container_name: firewall-grafana
+    container_name: secure-grafana
     restart: unless-stopped
     ports:
       - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin123
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
     depends_on:
       - prometheus
     networks:
-      - firewall-network
+      - secure-network
+    profiles:
+      - monitoring  # 仅在监控模式下启动
 
 networks:
-  firewall-network:
+  secure-network:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.21.0.0/16
 
 volumes:
   redis_data:
