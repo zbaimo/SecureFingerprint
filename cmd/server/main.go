@@ -233,6 +233,7 @@ func (app *App) initRoutes() {
 		
 		// 管理界面路由
 		app.router.StaticFile("/admin.html", app.config.WebUI.StaticPath+"/admin.html")
+		app.router.StaticFile("/manage.html", app.config.WebUI.StaticPath+"/manage.html")
 		adminGroup := app.router.Group("/admin")
 		{
 			adminGroup.StaticFile("/", app.config.WebUI.StaticPath+"/admin/index.html")
