@@ -9,19 +9,19 @@
     <el-row :gutter="20" class="stats-row">
       <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
         <div class="stat-card">
-          <div class="stat-number">{{ stats.totalRequests | formatNumber }}</div>
+          <div class="stat-number">{{ formatNumber(stats.totalRequests) }}</div>
           <div class="stat-label">总访问量</div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
         <div class="stat-card success">
-          <div class="stat-number">{{ stats.todayRequests | formatNumber }}</div>
+          <div class="stat-number">{{ formatNumber(stats.todayRequests) }}</div>
           <div class="stat-label">今日访问</div>
         </div>
       </el-col>
       <el-col :xs="12" :sm="6" :md="6" :lg="6" :xl="6">
         <div class="stat-card warning">
-          <div class="stat-number">{{ stats.blockedRequests | formatNumber }}</div>
+          <div class="stat-number">{{ formatNumber(stats.blockedRequests) }}</div>
           <div class="stat-label">拦截请求</div>
         </div>
       </el-col>
@@ -477,14 +477,6 @@ export default {
       getScoreClass,
       getRiskType,
       getRiskText
-    }
-  },
-  filters: {
-    formatNumber(num) {
-      if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K'
-      }
-      return num.toString()
     }
   }
 }
