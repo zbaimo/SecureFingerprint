@@ -6,7 +6,7 @@ setlocal enabledelayedexpansion
 REM 配置变量
 set DOCKER_USERNAME=%DOCKER_USERNAME%
 if "%DOCKER_USERNAME%"=="" set DOCKER_USERNAME=zbaimo
-set IMAGE_NAME=firewall-controller
+set IMAGE_NAME=securefingerprint
 set VERSION=%VERSION%
 if "%VERSION%"=="" set VERSION=v1.0.0
 set PLATFORM=linux/amd64,linux/arm64

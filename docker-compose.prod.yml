@@ -48,7 +48,7 @@ services:
 
   # 防火墙控制器主应用
   firewall-controller:
-    image: zbaimo/firewall-controller:latest
+    image: zbaimo/securefingerprint:latest
     container_name: firewall-controller
     restart: unless-stopped
     ports:

@@ -14,7 +14,7 @@ NC='\033[0m'
 
 # 配置
 DOCKER_USERNAME="${DOCKER_USERNAME:-zbaimo}"
-IMAGE_NAME="${IMAGE_NAME:-firewall-controller}"
+IMAGE_NAME="${IMAGE_NAME:-securefingerprint}"
 VERSION="${VERSION:-v1.0.0}"
 PLATFORM="${PLATFORM:-linux/amd64,linux/arm64}"
 
