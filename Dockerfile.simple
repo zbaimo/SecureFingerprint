@@ -5,14 +5,21 @@ FROM golang:1.21-alpine AS builder
 # 安装必要的工具
 RUN apk add --no-cache git ca-certificates tzdata
 
+# 设置Go代理和环境变量
+ENV GOPROXY=https://goproxy.cn,https://proxy.golang.org,direct
+ENV GOSUMDB=sum.golang.org
+ENV GO111MODULE=on
+
 # 设置工作目录
 WORKDIR /app
 
 # 复制Go模块文件
 COPY go.mod go.sum ./
 
-# 下载依赖
-RUN go mod download
+# 下载依赖，增加重试机制
+RUN go mod download || \
+    (echo "第一次下载失败，重试..." && sleep 5 && go mod download) || \
+    (echo "第二次下载失败，使用直连模式..." && GOPROXY=direct go mod download)
 
 # 复制源码
 COPY . .
