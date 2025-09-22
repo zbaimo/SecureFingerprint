@@ -1,7 +1,8 @@
-version: '3.8'
+# SecureFingerprint Docker Compose 配置
+# 新版本格式，无需version声明
 
 services:
-  # 防火墙控制器主应用 (使用Docker Hub镜像)
+  # 防火墙控制器主应用
   securefingerprint:
     image: zbaimo/securefingerprint:latest
     container_name: securefingerprint
@@ -9,7 +10,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - TZ=Asia/Shanghai
+      TZ: Asia/Shanghai
     networks:
       - secure-network
     healthcheck:
@@ -19,7 +20,7 @@ services:
       retries: 3
       start_period: 10s
 
-  # Redis 缓存服务 (可选 - 用于扩展功能)
+  # Redis 缓存服务 (可选)
   redis:
     image: redis:7-alpine
     container_name: secure-redis
@@ -37,9 +38,9 @@ services:
       timeout: 10s
       retries: 3
     profiles:
-      - full  # 仅在完整模式下启动
+      - full
 
-  # MySQL 数据库服务 (可选 - 用于扩展功能)
+  # MySQL 数据库服务 (可选)
   mysql:
     image: mysql:8.0
     container_name: secure-mysql
@@ -63,7 +64,7 @@ services:
       timeout: 10s
       retries: 5
     profiles:
-      - full  # 仅在完整模式下启动
+      - full
 
   # Nginx 反向代理 (可选)
   nginx:
@@ -75,13 +76,13 @@ services:
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginxnginx_logs:/var/log/nginx
+      - ./nginx_logs:/var/log/nginx
     depends_on:
       - securefingerprint
     networks:
       - secure-network
     profiles:
-      - proxy  # 仅在代理模式下启动
+      - proxy
 
   # Prometheus 监控 (可选)
   prometheus:
@@ -100,7 +101,7 @@ services:
     networks:
       - secure-network
     profiles:
-      - monitoring  # 仅在监控模式下启动
+      - monitoring
 
   # Grafana 仪表板 (可选)
   grafana:
@@ -110,9 +111,9 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
-      - GF_INSTALL_PLUGINS=grafana-clock-panel
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin123}
+      GF_INSTALL_PLUGINS: grafana-clock-panel
     volumes:
       - grafana_data:/var/lib/grafana
     depends_on:
@@ -120,7 +121,7 @@ services:
     networks:
       - secure-network
     profiles:
-      - monitoring  # 仅在监控模式下启动
+      - monitoring
 
 networks:
   secure-network:
@@ -131,12 +132,6 @@ networks:
 
 volumes:
   redis_data:
-    driver: local
   mysql_data:
-    driver: local
   prometheus_data:
-    driver: local
-  grafana_data:
-    driver: local
-  nginx_logs:
-    driver: local
+  grafana_data
