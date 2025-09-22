@@ -231,6 +231,16 @@ func (app *App) initRoutes() {
 		app.router.StaticFile("/", app.config.WebUI.StaticPath+"/index.html")
 		app.router.StaticFile("/favicon.ico", app.config.WebUI.StaticPath+"/favicon.ico")
 		
+		// 管理界面路由
+		app.router.StaticFile("/admin.html", app.config.WebUI.StaticPath+"/admin.html")
+		adminGroup := app.router.Group("/admin")
+		{
+			adminGroup.StaticFile("/", app.config.WebUI.StaticPath+"/admin/index.html")
+			adminGroup.GET("/*path", func(c *gin.Context) {
+				c.File(app.config.WebUI.StaticPath + "/admin/index.html")
+			})
+		}
+		
 		// SPA路由支持
 		app.router.NoRoute(func(c *gin.Context) {
 			c.File(app.config.WebUI.StaticPath + "/index.html")
