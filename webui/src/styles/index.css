@@ -1,0 +1,267 @@
+/* 全局样式 */
+
+/* 重置默认样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 布局样式 */
+.layout-container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-content {
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #f5f7fa;
+}
+
+/* 卡片样式 */
+.dashboard-card {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  border: none;
+}
+
+.dashboard-card .el-card__header {
+  background-color: #fafbfc;
+  border-bottom: 1px solid #ebeef5;
+  padding: 18px 20px;
+}
+
+.dashboard-card .el-card__body {
+  padding: 20px;
+}
+
+/* 统计卡片 */
+.stat-card {
+  text-align: center;
+  padding: 20px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card.success {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.stat-card.warning {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-card.danger {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+}
+
+.stat-card .stat-number {
+  font-size: 2.5em;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.stat-card .stat-label {
+  font-size: 1.1em;
+  opacity: 0.9;
+}
+
+/* 表格样式 */
+.data-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.data-table .el-table__header {
+  background-color: #fafbfc;
+}
+
+.data-table .el-table th {
+  background-color: #fafbfc;
+  color: #606266;
+  font-weight: 600;
+}
+
+/* 按钮样式 */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.action-buttons .el-button {
+  margin: 0;
+}
+
+/* 状态标签 */
+.status-tag {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.status-tag.success {
+  background-color: #f0f9ff;
+  color: #10b981;
+  border: 1px solid #10b981;
+}
+
+.status-tag.warning {
+  background-color: #fffbeb;
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+}
+
+.status-tag.danger {
+  background-color: #fef2f2;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.status-tag.info {
+  background-color: #f0f9ff;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 10px;
+  }
+  
+  .dashboard-card .el-card__body {
+    padding: 15px;
+  }
+  
+  .stat-card .stat-number {
+    font-size: 2em;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons .el-button {
+    width: 100%;
+  }
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #909399;
+}
+
+.empty-state .empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state .empty-text {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+/* 图表容器 */
+.chart-container {
+  height: 400px;
+  width: 100%;
+}
+
+/* 搜索表单 */
+.search-form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.search-form .el-form-item {
+  margin-bottom: 16px;
+}
+
+/* 页面标题 */
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #303133;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-title .title-icon {
+  color: #409eff;
+}
+
+/* 面包屑导航 */
+.breadcrumb-container {
+  margin-bottom: 20px;
+}
+
+/* 工具栏 */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.toolbar-left, .toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 分页样式 */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* 暗色主题支持 */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1a1a1a;
+  }
+  
+  .main-content {
+    background-color: #1a1a1a;
+  }
+}

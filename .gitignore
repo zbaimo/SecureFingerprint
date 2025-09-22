@@ -1,0 +1,94 @@
+# 编译输出
+build/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go相关
+*.test
+*.prof
+coverage.out
+coverage.html
+
+# 依赖目录
+vendor/
+
+# 配置文件中的敏感信息
+configs/production.yaml
+configs/local.yaml
+.env
+.env.local
+
+# 日志文件
+logs/
+*.log
+
+# 数据库文件
+*.db
+*.sqlite
+
+# 临时文件
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Vue.js
+webui/dist/
+webui/build/
+
+# Docker
+.dockerignore
+
+# 备份文件
+backups/
+*.backup
+*.bak
+
+# 证书和密钥
+*.pem
+*.key
+*.crt
+*.p12
+
+# 测试相关
+test-results/
+*.cover
+
+# 发布包
+release/
+*.tar.gz
+*.zip
+
+# 监控和分析工具
+.nyc_output
+coverage/
+
+# 操作系统
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 其他
+*.orig

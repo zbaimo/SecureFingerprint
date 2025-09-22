@@ -1,0 +1,64 @@
+server:
+  port: 8080
+  debug: false
+
+redis:
+  addr: "redis:6379"
+  password: ""
+  db: 0
+  pool_size: 10
+
+mysql:
+  dsn: "firewall_user:firewall_password@tcp(mysql:3306)/firewall_controller?charset=utf8mb4&parseTime=True&loc=Local"
+  max_open_conns: 100
+  max_idle_conns: 10
+  conn_max_lifetime: 300s
+
+security:
+  # 打分系统配置
+  scoring:
+    initial_score: 100
+    normal_access_bonus: 1
+    max_score: 100
+    frequent_request_penalty: -10
+    suspicious_ua_penalty: -20
+    ban_threshold: 0
+    bot_penalty: -15
+    proxy_penalty: -5
+    path_spam_penalty: -8
+    no_referer_penalty: -2
+  
+  # 限制器配置
+  limiter:
+    rate_limit_window: 60s
+    max_requests_per_window: 100
+    ban_duration: 3600s
+    delay_response_ms: 1000
+    warning_threshold: 30
+    critical_threshold: 10
+  
+  # 行为分析配置
+  analyzer:
+    suspicious_request_threshold: 50
+    path_repeat_threshold: 10
+    bot_detection_enabled: true
+    analysis_window: 3600s
+    pattern_detection_enabled: true
+
+# 日志配置
+logging:
+  level: "info"
+  file: "logs/app.log"
+  max_size: 100
+  max_backups: 3
+  max_age: 30
+
+# WebUI配置
+webui:
+  enabled: true
+  static_path: "./webui/build"
+  api_prefix: "/api/v1"
+
+# 用户注册配置
+user:
+  allow_registration: false

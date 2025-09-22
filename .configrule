@@ -1,0 +1,41 @@
+firewall-controller/
+├── cmd/                    # 程序入口
+│   └── server/             # main.go 启动程序
+│
+├── internal/               # 内部核心逻辑
+│   ├── collector/          # 数据采集模块
+│   │   └── collector.go    # 获取IP、UA、设备等
+│   ├── fingerprint/        # 指纹生成模块
+│   │   └── fingerprint.go  # 生成16进制唯一ID
+│   ├── scorer/             # 打分系统
+│   │   └── scorer.go       # 加分/扣分逻辑
+│   ├── analyzer/           # 行为分析模块
+│   │   └── analyzer.go     # 访问频率、模式检测
+│   ├── limiter/            # 限制模块
+│   │   └── limiter.go      # 限速/封禁逻辑
+│   └── storage/            # 数据存储
+│       ├── redis.go        # Redis 缓存
+│       └── mysql.go        # MySQL 存档
+│
+├── webui/                  # WebUI 前端
+│   ├── src/                # Vue/React 源码
+│   ├── public/             # 静态文件
+│   └── build/              # 打包输出
+│
+├── api/                    # WebUI 接口
+│   ├── config.go           # 配置管理API
+│   ├── logs.go             # 日志查询API
+│   ├── score.go            # 用户打分API
+│   └── rule.go             # 风控规则API
+│
+├── configs/                # 配置文件
+│   └── config.yaml
+│
+├── pkg/                    # 通用工具库
+│   ├── utils/              # 公共函数
+│   └── middleware/         # Gin/Chi 中间件
+│
+├── docs/                   # 文档
+│   └── design.md
+│
+└── go.mod

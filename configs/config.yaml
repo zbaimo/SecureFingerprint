@@ -1,0 +1,56 @@
+server:
+  port: 8080
+  debug: true
+
+redis:
+  addr: "localhost:6379"
+  password: ""
+  db: 0
+  pool_size: 10
+
+mysql:
+  dsn: "root:password@tcp(localhost:3306)/firewall_controller?charset=utf8mb4&parseTime=True&loc=Local"
+  max_open_conns: 100
+  max_idle_conns: 10
+  conn_max_lifetime: 300s
+
+security:
+  # 打分系统配置
+  scoring:
+    initial_score: 100
+    normal_access_bonus: 1
+    max_score: 100
+    frequent_request_penalty: -10
+    suspicious_ua_penalty: -20
+    ban_threshold: 0
+  
+  # 限制器配置
+  limiter:
+    rate_limit_window: 60s      # 限速时间窗口
+    max_requests_per_window: 100 # 每个窗口最大请求数
+    ban_duration: 3600s         # 封禁时长
+    delay_response_ms: 1000     # 限速延迟时间
+  
+  # 行为分析配置
+  analyzer:
+    suspicious_request_threshold: 50  # 短时间内可疑请求阈值
+    path_repeat_threshold: 10         # 相同路径重复访问阈值
+    bot_detection_enabled: true       # 启用机器人检测
+
+# 日志配置
+logging:
+  level: "info"
+  file: "logs/app.log"
+  max_size: 100
+  max_backups: 3
+  max_age: 30
+
+# WebUI配置
+webui:
+  enabled: true
+  static_path: "./webui/build"
+  api_prefix: "/api/v1"
+
+# 用户注册配置
+user:
+  allow_registration: false  # 默认禁止用户注册
