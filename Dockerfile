@@ -35,7 +35,7 @@ RUN go mod download
 COPY . .
 
 # 复制前端构建产物
-COPY --from=frontend-builder /app/webui/dist ./webui/build
+COPY --from=frontend-builder /app/webui/build ./webui/build
 
 # 设置构建参数
 ARG VERSION=v1.0.0
