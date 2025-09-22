@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"firewall-controller/internal/analyzer"
-	"firewall-controller/internal/storage"
+	"securefingerprint/internal/analyzer"
+	"securefingerprint/internal/storage"
 )
 
 // 限制器配置

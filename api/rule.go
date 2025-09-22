@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"time"
 
-	"firewall-controller/internal/analyzer"
-	"firewall-controller/internal/limiter"
-	"firewall-controller/internal/storage"
+	"securefingerprint/internal/analyzer"
+	"securefingerprint/internal/limiter"
+	"securefingerprint/internal/storage"
 
 	"github.com/gin-gonic/gin"
 )

@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"firewall-controller/internal/scorer"
-	"firewall-controller/internal/storage"
+	"securefingerprint/internal/scorer"
+	"securefingerprint/internal/storage"
 
 	"github.com/gin-gonic/gin"
 )

@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"firewall-controller/internal/collector"
-	"firewall-controller/internal/storage"
+	"securefingerprint/internal/collector"
+	"securefingerprint/internal/storage"
 )
 
 // 打分规则配置

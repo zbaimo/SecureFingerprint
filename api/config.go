@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"firewall-controller/internal/limiter"
-	"firewall-controller/internal/scorer"
+	"securefingerprint/internal/limiter"
+	"securefingerprint/internal/scorer"
 
 	"github.com/gin-gonic/gin"
 )

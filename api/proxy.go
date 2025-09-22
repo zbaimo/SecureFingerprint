@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"firewall-controller/internal/collector"
+	"securefingerprint/internal/collector"
 
 	"github.com/gin-gonic/gin"
 )

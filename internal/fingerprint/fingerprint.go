@@ -9,7 +9,7 @@ import (
 	"sort"
 	"strings"
 
-	"firewall-controller/internal/collector"
+	"securefingerprint/internal/collector"
 )
 
 type Generator struct {
